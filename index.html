@@ -59,12 +59,11 @@
           const distanceOutput = document.getElementById("distanceOutput");
           const proximityOutput = document.getElementById("proximityOutput");
           const errorOutput = document.getElementById("errorOutput");
-
+          const errorObjectOutput = document.getElementById("errorObject");
           locationOutput.textContent = "";
           distanceOutput.textContent = "";
           proximityOutput.textContent = "";
           errorOutput.textContent = "";
-
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
           } else {
@@ -81,7 +80,13 @@
               37.395635,
               127.112555
             );
-
+            console.log(
+              "성공!",
+              position,
+              currentLatitude,
+              currentLongitude,
+              distance
+            );
             locationOutput.textContent = `Latitude: ${currentLatitude}, Longitude: ${currentLongitude}`;
             distanceOutput.textContent = `Pangyo Techone으로부터 거리: ${distance.toFixed(
               2
@@ -93,6 +98,7 @@
           }
 
           function showError(error) {
+            console.log("에러!", error);
             if (error.message) {
               errorOutput.textContent = `Error code: ${error.code}, Message: ${error.message}`;
             } else {
