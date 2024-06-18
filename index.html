@@ -144,19 +144,25 @@
         });
     </script>
     <script>
+      const locationOutput = document.getElementById("locationOutput2");
+      const distanceOutput = document.getElementById("distanceOutput2");
+      const proximityOutput = document.getElementById("proximityOutput2");
+      const errorOutput = document.getElementById("errorOutput2");
+      window.addEventListener("geoSuccess", (event) => {
+        showPosition(event.detail.latitude, event.detail.longitude);
+      });
+      window.addEventListener("geoError", (event) => {
+        showError(event.detail);
+      });
       document
         .getElementById("getLocationButton2")
         .addEventListener("click", () => {
-          const locationOutput = document.getElementById("locationOutput2");
-          const distanceOutput = document.getElementById("distanceOutput2");
-          const proximityOutput = document.getElementById("proximityOutput2");
-          const errorOutput = document.getElementById("errorOutput2");
           locationOutput.textContent = "";
           distanceOutput.textContent = "";
           proximityOutput.textContent = "";
           errorOutput.textContent = "";
           if (Geolocation) {
-            Geolocation.getCurrentPosition("showPosition", "showError");
+            Geolocation.getCurrentPosition("geoSuccess", "geoError");
           } else {
             errorOutput.textContent =
               "Geolocation is not supported by this browser.";
@@ -171,12 +177,7 @@
           37.395635,
           127.112555
         );
-        console.log(
-          "성공!",
-          currentLatitude,
-          currentLongitude,
-          distance
-        );
+        console.log("성공!", currentLatitude, currentLongitude, distance);
         locationOutput.textContent = `Latitude: ${currentLatitude}, Longitude: ${currentLongitude}`;
         distanceOutput.textContent = `Pangyo Techone으로부터 거리: ${distance.toFixed(
           2
@@ -187,12 +188,12 @@
             : "Pangyo Techone으로부터 5km 이내: N";
       }
 
-      function showError(errorCode) {
-        console.log("에러!", errorCode);
+      function showError(error) {
+        console.log("에러!", error);
         if (error.message) {
-          errorOutput.textContent = `Error code: ${errorCode}, Message: ${errorCode}`;
+          errorOutput.textContent = `Error code: ${error.code}, Message: ${error.message}`;
         } else {
-          errorOutput.textContent = `Error code: ${errorCode}`;
+          errorOutput.textContent = `Error code: ${error.code}`;
         }
       }
 
